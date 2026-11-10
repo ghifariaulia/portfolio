@@ -7,18 +7,19 @@
 }
 
 :root {
-  --bg: #f3f1ec;
-  --dots: #d9d4c8;
-  --tile: #ffffff;
-  --tile-2: #ebe8e1;
-  --text: #17171a;
-  --muted: #55555c;
-  --ink: #17171a; /* tile borders */
-  --shadow: #17171a; /* hard drop shadows */
-  --accent: #ff5a1f;
-  --accent-ink: #17171a;
-  --accent-text: #c2410c;
-  --green: #16a34a;
+  /* Solarized Osaka (light) */
+  --bg: #ede7d4; /* base2 */
+  --dots: #dbd4bd;
+  --tile: #fdf6e2; /* base3 */
+  --tile-2: #ede7d4; /* base2 */
+  --text: #002d38; /* base03 */
+  --muted: #586e74; /* base01 */
+  --ink: #002d38; /* tile borders */
+  --shadow: #002d38; /* hard drop shadows */
+  --accent: #b84514; /* orange600 */
+  --accent-ink: #fdf6e2;
+  --accent-text: #a23c11; /* orange700 */
+  --green: #859900;
   --px: 4px;
   --gap: 20px;
   /* Departure Mono is drawn on an 11px grid: keep its sizes at multiples of 11 */
@@ -30,18 +31,19 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --bg: #0e0e10;
-    --dots: #26262c;
-    --tile: #18181b;
-    --tile-2: #26262b;
-    --text: #f2f2f3;
-    --muted: #a8a8b0;
-    --ink: #f2f2f3;
-    --shadow: #ff6a33;
-    --accent: #ff6a33;
-    --accent-ink: #120700;
-    --accent-text: #ff8a5c;
-    --green: #4ade80;
+    /* Solarized Osaka (dark) */
+    --bg: #00141a; /* base04 */
+    --dots: #073541;
+    --tile: #002d38; /* base03 */
+    --tile-2: #073541; /* base02 */
+    --text: #ede7d4; /* base2 */
+    --muted: #9fabad; /* base0 */
+    --ink: #2aa298; /* cyan */
+    --shadow: #fc723b;
+    --accent: #fc723b; /* orange200 */
+    --accent-ink: #00141a;
+    --accent-text: #fc723b;
+    --green: #859900;
     color-scheme: dark;
   }
 }

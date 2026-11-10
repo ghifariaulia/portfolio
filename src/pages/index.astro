@@ -1,24 +1,12 @@
 ---
 import Base from '../layouts/Base.astro';
 import { profile, skills, projects, experience, links } from '../data/profile';
+import { avatar } from '../data/avatar';
 
 const [featured, ...others] = projects;
 const [current] = experience;
 const FeaturedTag = featured?.url ? 'a' : 'div';
 const year = new Date().getFullYear();
-
-// Pixel avatar: 5x5 mirrored identicon derived from your name.
-let hash = 0;
-for (const ch of profile.name) hash = (hash * 31 + ch.charCodeAt(0)) >>> 0;
-const avatar: [number, number][] = [];
-for (let y = 0; y < 5; y++) {
-  for (let x = 0; x < 3; x++) {
-    if ((hash >> (y * 3 + x)) & 1) {
-      avatar.push([x, y]);
-      if (x < 2) avatar.push([4 - x, y]);
-    }
-  }
-}
 
 // Ordered (Bayer) dithering: pixel gradient that gets denser along one axis.
 const bayer = [
@@ -446,7 +434,7 @@ const arrow = 'M2 1h4v1H2zM5 2h1v3H5zM4 2h1v1H4zM3 3h1v1H3zM2 4h1v1H2zM1 5h1v1H1
     right: 0;
     bottom: 0;
     width: 70%;
-    fill: var(--accent);
+    fill: var(--ink);
     opacity: 0.35;
   }
   .featured h2 {
