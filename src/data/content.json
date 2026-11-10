@@ -1,0 +1,115 @@
+{
+  "profile": {
+    "name": "Ghifari Aulia Azhar Riza",
+    "shortName": "Ghifari",
+    "role": "Full Stack Engineer",
+    "tagline": "I build scalable web and mobile apps, microservices, and realtime systems.",
+    "location": "South Tangerang, Indonesia",
+    "timezone": "Asia/Jakarta",
+    "bio": [
+      "I'm a full stack engineer building web and mobile apps with Django, Next.js, Express.js and Flutter, shipped in Docker on AWS and GCP.",
+      "Lately I've been splitting monoliths into microservices, building API gateways for third-party integrations, and bringing LLM tools and n8n automation into day-to-day engineering.",
+      "Computer Science graduate from Universitas Indonesia (2019 – 2023)."
+    ],
+    "status": "",
+    "resumeUrl": ""
+  },
+  "skills": [
+    "Python",
+    "TypeScript",
+    "JavaScript",
+    "Go",
+    "Java",
+    "Dart",
+    "Next.js",
+    "Express.js",
+    "Django",
+    "Spring Boot",
+    "Flutter",
+    "Docker",
+    "Kubernetes",
+    "Kafka",
+    "Nginx",
+    "AWS",
+    "GCP",
+    "PostgreSQL",
+    "MySQL",
+    "TensorFlow",
+    "PyTorch"
+  ],
+  "projects": [
+    {
+      "title": "Real-time Crowd Detection for Smart-ads Billboards",
+      "context": "Thesis project · 2022 – 2023",
+      "description": "Fog-based IoT system running a YOLO model trained on CrowdHuman to detect crowds in real time, with Apache Kafka streaming to cut latency in ad delivery.",
+      "tags": [
+        "Python",
+        "YOLO",
+        "Kafka",
+        "IoT"
+      ]
+    },
+    {
+      "title": "Third-party Integration Gateways",
+      "context": "Mekar",
+      "description": "A set of gateway services, one per provider: payment gateway, digital signature (Privy), insurance platforms and more. Each wraps a third-party API behind a consistent internal interface.",
+      "tags": [
+        "Microservices",
+        "API Gateway",
+        "Payments",
+        "Privy"
+      ]
+    },
+    {
+      "title": "EV Charging Platform",
+      "context": "Transisi",
+      "description": "OCPP WebSocket server for EV charging stations, a Next.js dashboard, and a Flutter app for drivers on iOS and Android.",
+      "tags": [
+        "Express.js",
+        "OCPP",
+        "Flutter",
+        "Docker"
+      ]
+    }
+  ],
+  "experience": [
+    {
+      "role": "Full Stack Engineer",
+      "company": "Mekar Investama Teknologi",
+      "period": "Jan 2025 — Now",
+      "highlights": [
+        "Designed and built gateway services for third-party integrations, including payment processing, digital document signing (Privy) and insurance platforms.",
+        "Decomposed parts of a monolithic architecture into microservices to improve scalability and maintainability.",
+        "Built and optimized internal automation workflows with n8n, reducing manual operational effort.",
+        "Used LLM-assisted development tools such as Claude Code to speed up feature work and improve code reliability.",
+        "Explored ways to bring LLM capabilities into engineering workflows to raise team productivity.",
+        "Maintained and enhanced existing web-based systems to keep daily operations stable."
+      ]
+    },
+    {
+      "role": "Full Stack Engineer",
+      "company": "Transisi Enjiniring Indonesia",
+      "period": "Aug 2023 — Dec 2024",
+      "highlights": [
+        "Developed user interfaces with React.js and Next.js, improving UI performance and responsiveness.",
+        "Built server-side applications with Express.js, implementing OCPP for WebSocket management of EV charging stations.",
+        "Created cross-platform Flutter apps for iOS and Android that give EV drivers a seamless charging experience.",
+        "Containerized every service (API, frontend, WebSocket, database) with Docker for consistent development and production environments."
+      ]
+    },
+    {
+      "role": "Teaching Assistant, Computer Networks",
+      "company": "Universitas Indonesia",
+      "period": "Jul 2022 — Jan 2023, Aug 2023 — Jan 2024",
+      "highlights": [
+        "Helped students understand complex computer network concepts and supported them with assignments.",
+        "Ran exercise sessions to deepen engagement and gave feedback on project work."
+      ]
+    }
+  ],
+  "links": {
+    "email": "ghifari.auliaz@gmail.com",
+    "github": "https://github.com/ghifariaulia",
+    "linkedin": "https://www.linkedin.com/in/ghifariaulia"
+  }
+}

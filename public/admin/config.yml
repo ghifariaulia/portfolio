@@ -1,0 +1,100 @@
+# Sveltia CMS config. Docs: https://sveltiacms.app/en/docs
+# Local-only: open http://localhost:4321/portfolio/admin/ while `npm run dev` runs,
+# choose "Work with Local Repository" and pick this project folder.
+# This admin page is stripped from production builds (see astro.config.mjs).
+# The CMS requires a backend entry; with local editing the repo value is not used.
+backend:
+  name: github
+  repo: ghifariaulia/portfolio
+  branch: main
+
+# Uploaded files (e.g. your CV PDF) are committed here and served from public_folder.
+# public_folder must start with the same `base` as astro.config.mjs ('/' if you removed base).
+media_folder: public/uploads
+public_folder: /portfolio/uploads
+
+collections:
+  - name: site
+    label: Site
+    files:
+      - name: content
+        label: Portfolio content
+        file: src/data/content.json
+        format: json
+        fields:
+          - name: profile
+            label: Profile
+            widget: object
+            collapsed: false
+            fields:
+              - { name: name, label: Full name }
+              - { name: shortName, label: Short name, hint: 'Shown in the big "Hi, I''m ..." heading' }
+              - { name: role, label: Role }
+              - { name: tagline, label: Tagline, widget: text }
+              - { name: location, label: Location }
+              - name: timezone
+                label: Time zone
+                hint: IANA name for the live clock, e.g. Asia/Jakarta
+              - name: bio
+                label: About paragraphs
+                label_singular: Paragraph
+                widget: list
+                field: { name: paragraph, label: Paragraph, widget: text }
+              - name: status
+                label: Status line
+                hint: Short line on the orange tile, e.g. Open to new opportunities. Leave empty to hide.
+                required: false
+              - name: resumeUrl
+                label: Resume (PDF)
+                hint: Upload a PDF to show a Resume button. Leave empty to hide it.
+                widget: file
+                required: false
+
+          - name: skills
+            label: Skills
+            label_singular: Skill
+            widget: list
+            field: { name: skill, label: Skill }
+
+          - name: projects
+            label: Projects
+            label_singular: Project
+            hint: The first project gets the big featured tile. Drag to reorder.
+            widget: list
+            summary: '{{title}}'
+            fields:
+              - { name: title, label: Title }
+              - { name: context, label: Context, hint: 'Small label above the title, e.g. Thesis project · 2023 or a company name. Empty on the featured tile shows Featured project.', required: false }
+              - { name: description, label: Description, widget: text }
+              - name: tags
+                label: Tags
+                label_singular: Tag
+                widget: list
+                field: { name: tag, label: Tag }
+              - { name: url, label: Link, hint: Leave empty if there is no public demo or repo, required: false }
+
+          - name: experience
+            label: Experience
+            label_singular: Job
+            hint: Newest first. The first entry shows on the orange "Currently" tile.
+            widget: list
+            summary: '{{role}} · {{company}}'
+            fields:
+              - { name: role, label: Role }
+              - { name: company, label: Company }
+              - { name: period, label: Period, hint: 'e.g. Jan 2025 — Now' }
+              - name: highlights
+                label: Responsibilities
+                label_singular: Responsibility
+                widget: list
+                required: false
+                field: { name: item, label: Responsibility, widget: text }
+
+          - name: links
+            label: Links
+            widget: object
+            collapsed: false
+            fields:
+              - { name: email, label: Email }
+              - { name: github, label: GitHub URL, required: false }
+              - { name: linkedin, label: LinkedIn URL, required: false }

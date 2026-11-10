@@ -1,0 +1,103 @@
+@font-face {
+  font-family: 'Departure Mono';
+  src: url('../fonts/DepartureMono-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  --bg: #f3f1ec;
+  --dots: #d9d4c8;
+  --tile: #ffffff;
+  --tile-2: #ebe8e1;
+  --text: #17171a;
+  --muted: #55555c;
+  --ink: #17171a; /* tile borders */
+  --shadow: #17171a; /* hard drop shadows */
+  --accent: #ff5a1f;
+  --accent-ink: #17171a;
+  --accent-text: #c2410c;
+  --green: #16a34a;
+  --px: 4px;
+  --gap: 20px;
+  /* Departure Mono is drawn on an 11px grid: keep its sizes at multiples of 11 */
+  --font-pixel: 'Departure Mono', monospace;
+  --font-mini: 'Departure Mono', monospace;
+  --font-body: 'VT323', monospace;
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0e0e10;
+    --dots: #26262c;
+    --tile: #18181b;
+    --tile-2: #26262b;
+    --text: #f2f2f3;
+    --muted: #a8a8b0;
+    --ink: #f2f2f3;
+    --shadow: #ff6a33;
+    --accent: #ff6a33;
+    --accent-ink: #120700;
+    --accent-text: #ff8a5c;
+    --green: #4ade80;
+    color-scheme: dark;
+  }
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background-color: var(--bg);
+  /* pixel dot grid */
+  background-image: conic-gradient(at 4px 4px, transparent 75%, var(--dots) 0);
+  background-size: 24px 24px;
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 21px;
+  line-height: 1.25;
+  font-synthesis: none; /* pixel fonts have one weight; no fake bold */
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-pixel);
+  font-weight: 400;
+  line-height: 1.05;
+  margin: 0;
+}
+
+p {
+  margin: 0;
+}
+
+a {
+  color: inherit;
+}
+
+svg.px,
+img {
+  image-rendering: pixelated;
+  shape-rendering: crispEdges;
+}
+
+:focus-visible {
+  outline: 4px dashed var(--accent-text);
+  outline-offset: 4px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}

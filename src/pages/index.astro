@@ -1,0 +1,571 @@
+---
+import Base from '../layouts/Base.astro';
+import { profile, skills, projects, experience, links } from '../data/profile';
+
+const [featured, ...others] = projects;
+const [current] = experience;
+const FeaturedTag = featured?.url ? 'a' : 'div';
+const year = new Date().getFullYear();
+
+// Pixel avatar: 5x5 mirrored identicon derived from your name.
+let hash = 0;
+for (const ch of profile.name) hash = (hash * 31 + ch.charCodeAt(0)) >>> 0;
+const avatar: [number, number][] = [];
+for (let y = 0; y < 5; y++) {
+  for (let x = 0; x < 3; x++) {
+    if ((hash >> (y * 3 + x)) & 1) {
+      avatar.push([x, y]);
+      if (x < 2) avatar.push([4 - x, y]);
+    }
+  }
+}
+
+// Ordered (Bayer) dithering: pixel gradient that gets denser along one axis.
+const bayer = [
+  [0, 8, 2, 10],
+  [12, 4, 14, 6],
+  [3, 11, 1, 9],
+  [15, 7, 13, 5],
+];
+function dither(w: number, h: number, axis: 'x' | 'y') {
+  let d = '';
+  for (let y = 0; y < h; y++) {
+    for (let x = 0; x < w; x++) {
+      const t = axis === 'x' ? x / (w - 1) : y / (h - 1);
+      if (bayer[y % 4][x % 4] / 16 < t) d += `M${x} ${y}h1v1h-1z`;
+    }
+  }
+  return d;
+}
+const ditherFeatured = dither(28, 14, 'x');
+const ditherAccent = dither(24, 8, 'y');
+
+const arrow = 'M2 1h4v1H2zM5 2h1v3H5zM4 2h1v1H4zM3 3h1v1H3zM2 4h1v1H2zM1 5h1v1H1z';
+---
+
+<Base>
+  <main class="bento">
+    <!-- Intro -->
+    <section class="tile intro" style="--i:0">
+      <svg class="px avatar" viewBox="-1 -1 7 7" aria-hidden="true">
+        <rect x="-1" y="-1" width="7" height="7" class="avatar-bg"></rect>
+        {avatar.map(([x, y]) => <rect x={x} y={y} width="1" height="1" />)}
+      </svg>
+      <div>
+        <p class="eyebrow">&gt; {profile.role}</p>
+        <h1>Hi, I'm {profile.shortName}<span class="cursor" aria-hidden="true">_</span></h1>
+        <p class="tagline">{profile.tagline}</p>
+      </div>
+      <div class="actions">
+        <a class="btn primary" href={`mailto:${links.email}`}>Get in touch</a>
+        {profile.resumeUrl && <a class="btn" href={profile.resumeUrl}>Resume</a>}
+      </div>
+    </section>
+
+    <!-- Location + live clock -->
+    <section class="tile place" style="--i:1">
+      <p class="label">Based in</p>
+      <p class="big">{profile.location}</p>
+      <p class="clock" data-tz={profile.timezone}>
+        <span class="dot" aria-hidden="true"></span>
+        <span class="time">--:--</span> local
+      </p>
+    </section>
+
+    <!-- Current role -->
+    <section class="tile now accent" style="--i:2">
+      <p class="label">Currently</p>
+      {current && <p class="big">{current.role}</p>}
+      {current && <p>@ {current.company}</p>}
+      {profile.status && <p class="status">{profile.status}</p>}
+      <svg class="px dither" viewBox="0 0 24 8" preserveAspectRatio="none" aria-hidden="true">
+        <path d={ditherAccent} />
+      </svg>
+    </section>
+
+    <!-- About -->
+    <section class="tile about" style="--i:3">
+      <h2 class="label">About</h2>
+      {profile.bio.map((p) => <p>{p}</p>)}
+    </section>
+
+    <!-- Stack -->
+    <section class="tile stack" style="--i:4">
+      <h2 class="label">Stack</h2>
+      <ul class="chips">
+        {skills.map((s) => <li>{s}</li>)}
+      </ul>
+    </section>
+
+    <!-- Featured project -->
+    {featured && (
+    <FeaturedTag
+      class="tile project featured"
+      href={featured.url}
+      target={featured.url && '_blank'}
+      rel={featured.url && 'noopener'}
+      style="--i:5"
+    >
+      <svg class="px dither" viewBox="0 0 28 14" aria-hidden="true">
+        <path d={ditherFeatured} />
+      </svg>
+      <p class="label">{featured.context || 'Featured project'}</p>
+      <h2>{featured.title}</h2>
+      <p class="desc">{featured.description}</p>
+      <ul class="chips small">{featured.tags.map((t) => <li>{t}</li>)}</ul>
+      {featured.url && <svg class="px arrow" viewBox="0 0 7 7" aria-hidden="true"><path d={arrow} /></svg>}
+    </FeaturedTag>
+    )}
+
+    <!-- Other projects -->
+    {others.map((p, n) => {
+      const Tag = p.url ? 'a' : 'div';
+      return (
+      <Tag class="tile project" href={p.url} target={p.url && '_blank'} rel={p.url && 'noopener'} style={`--i:${6 + n}`}>
+        {p.context && <p class="label">{p.context}</p>}
+        <h3>{p.title}</h3>
+        <p class="desc">{p.description}</p>
+        <ul class="chips small">{p.tags.map((t) => <li>{t}</li>)}</ul>
+        {p.url && <svg class="px arrow" viewBox="0 0 7 7" aria-hidden="true"><path d={arrow} /></svg>}
+      </Tag>
+      );
+    })}
+
+    <!-- Experience -->
+    <section class="tile work" style={`--i:${6 + others.length}`}>
+      <h2 class="label">Experience</h2>
+      <ol class="jobs">
+        {experience.map((e) => (
+          <li class="job">
+            <div class="job-head">
+              <h3>{e.role}</h3>
+              <p class="company">{e.company}</p>
+              <p class="period">{e.period}</p>
+            </div>
+            {e.highlights.length > 0 && (
+              <ul class="highlights">
+                {e.highlights.map((h) => <li>{h}</li>)}
+              </ul>
+            )}
+          </li>
+        ))}
+      </ol>
+    </section>
+
+    <!-- Links -->
+    <section class="tile links" style={`--i:${7 + others.length}`}>
+      <h2 class="label">Find me</h2>
+      <ul>
+        {links.github && <li><a href={links.github} target="_blank" rel="noopener">GitHub <svg class="px arrow-sm" viewBox="0 0 7 7" aria-hidden="true"><path d={arrow} /></svg></a></li>}
+        {links.linkedin && <li><a href={links.linkedin} target="_blank" rel="noopener">LinkedIn <svg class="px arrow-sm" viewBox="0 0 7 7" aria-hidden="true"><path d={arrow} /></svg></a></li>}
+        <li><a href={`mailto:${links.email}`}>{links.email} <svg class="px arrow-sm" viewBox="0 0 7 7" aria-hidden="true"><path d={arrow} /></svg></a></li>
+      </ul>
+    </section>
+  </main>
+
+  <footer>© {year} {profile.name}</footer>
+</Base>
+
+<script>
+  const el = document.querySelector<HTMLElement>('.clock');
+  const out = el?.querySelector('.time');
+  if (el && out) {
+    const fmt = new Intl.DateTimeFormat('en-GB', {
+      hour: '2-digit',
+      minute: '2-digit',
+      timeZone: el.dataset.tz,
+    });
+    const tick = () => (out.textContent = fmt.format(new Date()));
+    tick();
+    setInterval(tick, 30_000);
+  }
+</script>
+
+<style>
+  .bento {
+    width: min(1120px, 100% - 40px);
+    margin: 40px auto 0;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--gap);
+  }
+
+  /* Tile: notched "pixel-rounded" outline + hard offset shadow */
+  .tile {
+    position: relative;
+    background: var(--tile);
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    min-width: 0;
+    box-shadow:
+      0 calc(-1 * var(--px)) 0 0 var(--ink),
+      0 var(--px) 0 0 var(--ink),
+      calc(-1 * var(--px)) 0 0 0 var(--ink),
+      var(--px) 0 0 0 var(--ink),
+      calc(2 * var(--px)) calc(2 * var(--px)) 0 0 var(--shadow);
+    margin: var(--px);
+    animation: rise 400ms steps(4) both;
+    animation-delay: calc(var(--i) * 70ms);
+  }
+  @keyframes rise {
+    from {
+      opacity: 0;
+      transform: translateY(16px);
+    }
+  }
+
+  .label {
+    font-family: var(--font-mini);
+    font-size: 11px;
+    font-weight: 400;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 4px;
+  }
+
+  .big {
+    font-family: var(--font-pixel);
+    font-size: 22px;
+    font-weight: 400;
+    line-height: 1.1;
+  }
+
+  /* Intro */
+  .intro {
+    grid-column: span 2;
+    grid-row: span 2;
+    justify-content: space-between;
+    gap: 24px;
+    padding: 32px;
+  }
+  .avatar {
+    width: 72px;
+    height: 72px;
+    fill: var(--accent-ink);
+  }
+  .avatar-bg {
+    fill: var(--accent);
+  }
+  .eyebrow {
+    font-family: var(--font-mini);
+    font-size: 11px;
+    color: var(--accent-text);
+    margin-bottom: 12px;
+  }
+  h1 {
+    font-size: clamp(44px, 6vw, 66px);
+    margin-bottom: 16px;
+  }
+  .cursor {
+    color: var(--accent-text);
+    animation: blink 1s steps(1) infinite;
+  }
+  @keyframes blink {
+    50% {
+      opacity: 0;
+    }
+  }
+  .tagline {
+    font-size: 24px;
+    color: var(--muted);
+    max-width: 36ch;
+  }
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+  }
+  .btn {
+    display: inline-block;
+    padding: 12px 18px;
+    font-family: var(--font-mini);
+    font-size: 11px;
+    text-decoration: none;
+    background: var(--tile-2);
+    color: var(--text);
+    border: 3px solid var(--ink);
+    box-shadow: 4px 4px 0 0 var(--shadow);
+    transition: transform 90ms steps(2), box-shadow 90ms steps(2);
+  }
+  .btn:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 6px 6px 0 0 var(--shadow);
+  }
+  .btn:active {
+    transform: translate(4px, 4px);
+    box-shadow: 0 0 0 0 var(--shadow);
+  }
+  .btn.primary {
+    background: var(--accent);
+    color: var(--accent-ink);
+  }
+
+  /* Location */
+  .clock {
+    margin-top: auto;
+    font-family: var(--font-mini);
+    font-size: 11px;
+    text-transform: uppercase;
+    color: var(--muted);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .time {
+    font-family: var(--font-pixel);
+    font-size: 22px;
+    color: var(--text);
+  }
+  .dot {
+    width: 8px;
+    height: 8px;
+    background: var(--green);
+    animation: blink 1.2s steps(1) infinite;
+  }
+
+  /* Now (accent tile) */
+  .accent {
+    background: var(--accent);
+    color: var(--accent-ink);
+    padding-bottom: 56px;
+  }
+  .accent .label {
+    color: inherit;
+  }
+  .status {
+    margin-top: auto;
+    font-weight: 600;
+  }
+  .accent .dither {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: 32px;
+    fill: var(--accent-ink);
+    opacity: 0.85;
+  }
+
+  .about,
+  .stack {
+    grid-column: span 2;
+  }
+  .about p + p {
+    margin-top: 6px;
+  }
+  .about p:not(.label) {
+    color: var(--muted);
+  }
+
+  /* Chips */
+  .chips {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .chips li {
+    padding: 6px 10px;
+    font-family: var(--font-mini);
+    font-size: 11px;
+    background: var(--tile-2);
+    border: 2px solid var(--ink);
+  }
+  .chips.small li {
+    font-size: 11px;
+    padding: 3px 8px;
+  }
+
+  /* Projects */
+  .project {
+    text-decoration: none;
+    transition: transform 120ms steps(3), box-shadow 120ms steps(3);
+  }
+  a.project:hover {
+    transform: translate(-4px, -4px);
+    box-shadow:
+      0 calc(-1 * var(--px)) 0 0 var(--ink),
+      0 var(--px) 0 0 var(--ink),
+      calc(-1 * var(--px)) 0 0 0 var(--ink),
+      var(--px) 0 0 0 var(--ink),
+      calc(4 * var(--px)) calc(4 * var(--px)) 0 0 var(--accent);
+  }
+  .project h3 {
+    font-size: 22px;
+    padding-right: 36px;
+  }
+  .project .desc {
+    color: var(--muted);
+    flex: 1;
+  }
+  .arrow {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    width: 21px;
+    height: 21px;
+    fill: currentColor;
+    transition: transform 120ms steps(2);
+  }
+  a.project:hover .arrow {
+    transform: translate(3px, -3px);
+    fill: var(--accent-text);
+  }
+  .featured {
+    grid-column: span 2;
+    grid-row: span 2;
+    padding: 32px;
+  }
+  .featured > :not(.dither) {
+    position: relative;
+  }
+  .featured .dither {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    width: 70%;
+    fill: var(--accent);
+    opacity: 0.35;
+  }
+  .featured h2 {
+    font-size: clamp(33px, 4vw, 44px);
+  }
+  .featured .desc {
+    font-size: 24px;
+  }
+
+  /* Experience: full width, role on the left, responsibilities on the right */
+  .work {
+    grid-column: 1 / -1;
+  }
+  .jobs {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .job {
+    display: grid;
+    grid-template-columns: minmax(200px, 300px) 1fr;
+    gap: 8px 32px;
+    padding: 20px 0;
+    border-top: 2px dashed var(--tile-2);
+  }
+  .job:first-child {
+    border-top: 0;
+    padding-top: 4px;
+  }
+  .job h3 {
+    font-size: 22px;
+    color: var(--accent-text);
+    margin-bottom: 6px;
+  }
+  .company {
+    font-weight: 400;
+  }
+  .period {
+    font-family: var(--font-mini);
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 4px;
+  }
+  .highlights {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 6px;
+  }
+  .highlights li {
+    position: relative;
+    padding-left: 20px;
+    color: var(--muted);
+  }
+  .highlights li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.5em;
+    width: 8px;
+    height: 8px;
+    background: var(--accent);
+  }
+
+  /* Links: full-width row */
+  .links {
+    grid-column: 1 / -1;
+  }
+  .links ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px 40px;
+  }
+  .links a {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 4px 0;
+    text-decoration: none;
+    overflow-wrap: anywhere;
+  }
+  .arrow-sm {
+    width: 14px;
+    height: 14px;
+    flex: none;
+    fill: currentColor;
+  }
+  .links a:hover {
+    color: var(--accent-text);
+  }
+
+  footer {
+    text-align: center;
+    font-family: var(--font-mini);
+    font-size: 11px;
+    color: var(--muted);
+    padding: 40px 16px 48px;
+  }
+
+  /* Tablet: 2 columns */
+  @media (max-width: 900px) {
+    .bento {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    .intro,
+    .featured {
+      grid-row: auto;
+    }
+  }
+
+  /* Phone: 1 column */
+  @media (max-width: 560px) {
+    .bento {
+      width: calc(100% - 32px);
+      grid-template-columns: 1fr;
+      margin-top: 20px;
+    }
+    .tile,
+    .intro,
+    .featured {
+      grid-column: auto;
+      padding: 22px;
+    }
+    .accent {
+      padding-bottom: 52px;
+    }
+    .job {
+      grid-template-columns: 1fr;
+    }
+    .links ul {
+      flex-direction: column;
+    }
+  }
+</style>
