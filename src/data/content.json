@@ -20,6 +20,7 @@
     "JavaScript",
     "Go",
     "Java",
+    "Kotlin",
     "Dart",
     "Next.js",
     "Express.js",
@@ -46,19 +47,22 @@
         "Python",
         "YOLO",
         "Kafka",
-        "IoT"
-      ]
+        "IoT",
+        "PyTorch"
+      ],
+      "url": "https://drive.google.com/file/d/16cBj0s0kYKaRbsSMS2Qw8-j1OJUo7JXs/view?usp=sharing"
     },
     {
       "title": "Third-party Integration Gateways",
       "context": "Mekar",
       "description": "A set of gateway services, one per provider: payment gateway, digital signature (Privy), insurance platforms and more. Each wraps a third-party API behind a consistent internal interface.",
       "tags": [
+        "Python",
         "Microservices",
         "API Gateway",
-        "Payments",
-        "Privy"
-      ]
+        "Payments"
+      ],
+      "url": ""
     },
     {
       "title": "EV Charging Platform",
@@ -66,10 +70,25 @@
       "description": "OCPP WebSocket server for EV charging stations, a Next.js dashboard, and a Flutter app for drivers on iOS and Android.",
       "tags": [
         "Express.js",
+        "React.js",
         "OCPP",
         "Flutter",
-        "Docker"
-      ]
+        "Docker",
+        "WebSocket"
+      ],
+      "url": ""
+    },
+    {
+      "title": "Baca",
+      "context": "Personal project",
+      "description": "An offline e-reader for Android and desktop that reads EPUB, FB2, DOCX, CBZ and more. Reading positions, highlights, notes and bookmarks stay on the device, with no account or server, and move between devices through a single backup file.",
+      "tags": [
+        "Kotlin",
+        "Kotlin Multiplatform",
+        "Compose Multiplatform",
+        "Android"
+      ],
+      "url": "https://github.com/ghifariaulia/baca"
     }
   ],
   "experience": [

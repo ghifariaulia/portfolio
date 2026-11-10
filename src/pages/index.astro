@@ -120,8 +120,21 @@ const arrow = 'M2 1h4v1H2zM5 2h1v3H5zM4 2h1v1H4zM3 3h1v1H3zM2 4h1v1H2zM1 5h1v1H1
     <!-- Other projects -->
     {others.map((p, n) => {
       const Tag = p.url ? 'a' : 'div';
+      // The first two tiles sit beside the featured one; later tiles fill
+      // rows of 4 (desktop) or 2 (tablet). Widen the last tile to close the row.
+      const isLast = n === others.length - 1;
+      const rest = (others.length - 2) % 4;
+      const spanLg = isLast && n >= 2 && rest ? 5 - rest : 1;
+      const spanMd = isLast && others.length % 2 ? 2 : 1;
+      const wide = spanLg > 1 || spanMd > 1;
       return (
-      <Tag class="tile project" href={p.url} target={p.url && '_blank'} rel={p.url && 'noopener'} style={`--i:${6 + n}`}>
+      <Tag
+        class:list={['tile project', { wide }]}
+        href={p.url}
+        target={p.url && '_blank'}
+        rel={p.url && 'noopener'}
+        style={`--i:${6 + n}` + (wide ? `;--span-lg:${spanLg};--span-md:${spanMd}` : '')}
+      >
         {p.context && <p class="label">{p.context}</p>}
         <h3>{p.title}</h3>
         <p class="desc">{p.description}</p>
@@ -417,6 +430,9 @@ const arrow = 'M2 1h4v1H2zM5 2h1v3H5zM4 2h1v1H4zM3 3h1v1H3zM2 4h1v1H2zM1 5h1v1H1
     transform: translate(3px, -3px);
     fill: var(--accent-text);
   }
+  .wide {
+    grid-column: span var(--span-lg);
+  }
   .featured {
     grid-column: span 2;
     grid-row: span 2;
@@ -542,6 +558,9 @@ const arrow = 'M2 1h4v1H2zM5 2h1v3H5zM4 2h1v1H4zM3 3h1v1H3zM2 4h1v1H2zM1 5h1v1H1
     .intro,
     .featured {
       grid-row: auto;
+    }
+    .wide {
+      grid-column: span var(--span-md);
     }
   }
 
